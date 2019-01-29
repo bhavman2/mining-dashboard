@@ -1,17 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 
 import { Link } from 'react-router-dom';
 import blue from '@material-ui/core/colors/blue';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-const auth = true;
 
 const styles = theme => ({
   root: {
@@ -26,23 +23,51 @@ const styles = theme => ({
   },
   appbar: {
     background: blue[500]
+  },
+  icon: {
+    padding: 2,
+    fontSize: 40
   }
 });
 
-function Navigation(props) {
-  const { classes } = props;
+function HomeIcon() {
   return (
-    <div className={classes.root}>
-      <AppBar position="static" className={classes.appbar}>
-        <Toolbar>
-          <Typography variant="h4" color="inherit" className={classes.grow}>
-            Mining Dashboard
-          </Typography>
-          {auth && <Button component={Link} to="/login" size="large" color="inherit">Login</Button>}
-        </Toolbar>
-      </AppBar>
-    </div>
+    <SvgIcon>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
   );
 }
+
+class Navigation extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount = () => {
+
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { isAuthenticated } = this.props.auth;
+
+    return (
+
+
+      <div className={classes.root}>
+        <AppBar position="static" className={classes.appbar}>
+          <Toolbar>
+            <HomeIcon className={classes.icon} color="white" />
+            <Typography component={Link} to="/" variant="h4" color="inherit" className={classes.grow}>
+              Mining Dashboard
+            </Typography>
+            {isAuthenticated() ? <Button onClick={this.props.auth.logout} size="large" color="inherit">Logout</Button> : <Button onClick={this.props.auth.login} size="large" color="inherit">Login</Button>}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
+}
+
 
 export default withStyles(styles)(Navigation);
